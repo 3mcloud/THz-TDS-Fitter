@@ -425,6 +425,8 @@ class FitterGUI:
             layer += 1
             table_layers += (entry + div)
         param_file = os.path.join(self._save_loc, "%s_fitParams_%s.txt" % (self._samp_name, timestamp_str))
+        if not os.path.isdir(self._save_loc):
+            os.makedirs(self._save_loc)
         with open(param_file, 'w') as f:
             f.write(table_layers)
         self._fit_widgets['save'].description = "Save Best Fit (last at %s)" % timestamp
