@@ -393,12 +393,12 @@ class FitterGUI:
         timestamp = str(dt.datetime.now()).split()[1].split('.')[0]
         try:
             if self._err_incl:
-                sigma = np.hstack([my[1][lo:hi] for my in self._meas_ydata])
+                sigma = np.hstack([my[1][lo:hi] for my in self._meas_ydata]) + (1e-6)
             else:
                 sigma = None
             pout = scp.optimize.curve_fit(
                 self._fit_func, self._meas_xdata[lo:hi], np.hstack([my[0][lo:hi] for my in self._meas_ydata]),
-                sigma=(sigma + 1e-6), p0=vals, bounds=(mins, maxs))
+                sigma=sigma, p0=vals, bounds=(mins, maxs))
             self._set_params(pout[0], np.sqrt(np.diag(pout[1])), rescale=True)
             self._set_param_widgets()
             self._plot_fits()
@@ -626,7 +626,7 @@ class FitterGUI:
         return
 
 
-def _load_data(fname, fdata=None):
+def load_data(fname, fdata=None):
     if "CSV" in fname.upper():
         delim = ','
     elif "TXT" in fname.upper() or "DAT" in fname.upper():
@@ -645,7 +645,7 @@ def _load_data(fname, fdata=None):
     return np.array(all_float).astype(float).T
 
 
-def _unpack_params(fname, fdata=None):
+def unpack_params(fname, fdata=None):
     if fdata is None:
         with open(fname) as f:
             data_rows = [row.split('|') for row in f.readlines()]
