@@ -180,7 +180,7 @@ class FitterGUI:
                   for v in self._fupload_widgets["upload"].value}
         self._meas_data_dict.clear()
         for k, v in fconts.items():
-            data = _load_data(k, v)
+            data = load_data(k, v)
             tags = k.replace('-', '_').replace('.', '_').replace(';', '_').split('_')[:-1]
             found_id = False
             for yid in self.fitter.ydata_ids:
@@ -446,7 +446,7 @@ class FitterGUI:
     def _upload_params(self, button):
         fname = self._fit_widgets["upload"].value[0]["name"]
         fdata = codecs.decode(self._fit_widgets["upload"].value[0].content, encoding='utf-8')
-        self._params = _unpack_params(fname, fdata)
+        self._params = unpack_params(fname, fdata)
         self._best_params = copy.deepcopy(self._params)
         ldate = fname.split(self._fdelim)[-2:]
         date = ldate[0][:4] + '-' + ldate[0][4:6] + '-' + ldate[0][6:8]
